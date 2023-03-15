@@ -4,6 +4,8 @@ import cv2
 import numpy as np
 import os
 import pickle
+import time
+from datetime import timedelta
 
 from utils.create_token import create_token
 
@@ -42,11 +44,13 @@ reddit = praw.Reddit(client_id=creds['client_id'],
 
 f_final = open("sub_list.csv", "r")
 img_notfound = cv2.imread('imageNF.png')
+startTime=time.time()
 for line in f_final:
     sub = line.strip()
     subreddit = reddit.subreddit(sub)
 
     print(f"Starting {sub}!")
+    totalcount=0
     count = 0
     for submission in subreddit.new(limit=POST_SEARCH_AMOUNT):
         if "jpg" in submission.url.lower() or "png" in submission.url.lower():
@@ -69,13 +73,23 @@ for line in f_final:
                     b, g, r = cv2.split(difference)
                     total_difference = cv2.countNonZero(b) + cv2.countNonZero(g) + cv2.countNonZero(r)
                     if total_difference == 0:
+                        totalcount+=1
+                        print("Status: " +str(totalcount)+"/"+str(POST_SEARCH_AMOUNT))   
+                        print("Failed picture")
                         ignore_flag = True
 
                 if not ignore_flag:
                     cv2.imwrite(f"{image_path}{sub}-{submission.id}.png", image)
                     count += 1
+                    totalcount+=1
+                    print("Status: " +str(totalcount)+"/"+str(POST_SEARCH_AMOUNT))   
                     
             except Exception as e:
+                totalcount+=1
+                print("Status: " +str(totalcount)+"/"+str(POST_SEARCH_AMOUNT))  
                 print(f"Image failed. {submission.url.lower()}")
+                
                 print(e)
-        
+endTime=int(time.time()-startTime)
+td=timedelta(seconds=endTime)
+print("Time elapsed in hh:mm:ss | "+str(td))
