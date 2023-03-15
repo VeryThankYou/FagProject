@@ -5,12 +5,14 @@ import numpy as np
 import os
 import pickle
 import time
+import multiprocessing
+from numba import jit, cuda
 from datetime import timedelta
 
 from utils.create_token import create_token
 
-POST_SEARCH_AMOUNT = 5
-
+POST_SEARCH_AMOUNT = 1000
+#@jit(target_backend='cuda')   
 # Create directory if it doesn't exist to save images
 def create_folder(image_path):
     CHECK_FOLDER = os.path.isdir(image_path)
@@ -55,7 +57,7 @@ for line in f_final:
     for submission in subreddit.new(limit=POST_SEARCH_AMOUNT):
         if "jpg" in submission.url.lower() or "png" in submission.url.lower():
             try:
-                resp = requests.get(submission.url.lower(), stream=True).raw
+                resp = requests.get(submission.preview["images"][0]["resolutions"][4]["url"], stream=True).raw
                 image = np.asarray(bytearray(resp.read()), dtype="uint8")
                 image = cv2.imdecode(image, cv2.IMREAD_COLOR)
 
