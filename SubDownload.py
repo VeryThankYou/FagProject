@@ -95,5 +95,5 @@ for line in f_final:
 endTime=int(time.time()-startTime)
 td=timedelta(seconds=endTime)
 print("Time elapsed in hh:mm:ss | "+str(td))
-print("Images resized: "+count)
-print("Images failed to save: "+failed)
+print("Images raw: "+str(count))
+print("Images failed to save: "+str(failed))    
