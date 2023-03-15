@@ -9,7 +9,7 @@ from datetime import timedelta
 
 from utils.create_token import create_token
 
-POST_SEARCH_AMOUNT = 1000
+POST_SEARCH_AMOUNT = 5
 
 # Create directory if it doesn't exist to save images
 def create_folder(image_path):
