@@ -1,0 +1,4 @@
+from DownloadRedditPictures import DownloadRedditPictures
+
+redditPictures=DownloadRedditPictures(1000,600)
+redditPictures.savePictures()
