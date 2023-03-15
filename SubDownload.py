@@ -12,7 +12,7 @@ from datetime import timedelta
 from utils.create_token import create_token
 
 POST_SEARCH_AMOUNT = 1000
-#@jit(target_backend='cuda')   
+@jit(target_backend='cuda')   
 # Create directory if it doesn't exist to save images
 def create_folder(image_path):
     CHECK_FOLDER = os.path.isdir(image_path)
@@ -54,10 +54,15 @@ for line in f_final:
     print(f"Starting {sub}!")
     totalcount=0
     count = 0
+    failed=0
     for submission in subreddit.new(limit=POST_SEARCH_AMOUNT):
         if "jpg" in submission.url.lower() or "png" in submission.url.lower():
             try:
-                resp = requests.get(submission.preview["images"][0]["resolutions"][4]["url"], stream=True).raw
+                if((int(submission.preview["images"][0]["resolutions"][5]["width"])<600) or int(submission.preview["images"][0]["resolutions"][5]["height"])<600):
+                    resp= requests.get(submission.url.lower(), stream=True).raw
+                    count+=1
+                else:
+                    resp = requests.get(submission.preview["images"][0]["resolutions"][5]["url"], stream=True).raw
                 image = np.asarray(bytearray(resp.read()), dtype="uint8")
                 image = cv2.imdecode(image, cv2.IMREAD_COLOR)
 
@@ -76,22 +81,19 @@ for line in f_final:
                     total_difference = cv2.countNonZero(b) + cv2.countNonZero(g) + cv2.countNonZero(r)
                     if total_difference == 0:
                         totalcount+=1
-                        print("Status: " +str(totalcount)+"/"+str(POST_SEARCH_AMOUNT))   
-                        print("Failed picture")
+                        failed+=1
                         ignore_flag = True
 
                 if not ignore_flag:
                     cv2.imwrite(f"{image_path}{sub}-{submission.id}.png", image)
-                    count += 1
                     totalcount+=1
                     print("Status: " +str(totalcount)+"/"+str(POST_SEARCH_AMOUNT))   
                     
             except Exception as e:
                 totalcount+=1
-                print("Status: " +str(totalcount)+"/"+str(POST_SEARCH_AMOUNT))  
-                print(f"Image failed. {submission.url.lower()}")
-                
-                print(e)
+                failed+=1
 endTime=int(time.time()-startTime)
 td=timedelta(seconds=endTime)
 print("Time elapsed in hh:mm:ss | "+str(td))
+print("Images resized: "+count)
+print("Images failed to save: "+failed)
