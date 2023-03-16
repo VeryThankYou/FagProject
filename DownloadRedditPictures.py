@@ -16,7 +16,7 @@ class DownloadRedditPictures:
     def __init__(self,resize):
         self.resize=resize
         start_time = datetime.utcnow()  #datetime.strptime("10/05/2021", "%m/%d/%Y")
-        end_time = datetime.strptime("12/31/2022", "%m/%d/%Y")  #datetime.strptime("09/25/2021", "%m/%d/%Y")
+        end_time = datetime.strptime("01/09/2012", "%m/%d/%Y")  #datetime.strptime("09/25/2021", "%m/%d/%Y")
         self.ids=download_from_url(start_time,end_time)
         self.ids = [i if i.startswith('t3_') else f't3_{i}' for i in self.ids]
         self.search=int(len(self.ids))
