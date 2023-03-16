@@ -16,7 +16,7 @@ class DownloadRedditPictures:
     def __init__(self,resize):
         self.resize=resize
         start_time = datetime.utcnow()  #datetime.strptime("10/05/2021", "%m/%d/%Y")
-        end_time = datetime.strptime("12/31/2022", "%m/%d/%Y")  #datetime.strptime("09/25/2021", "%m/%d/%Y")
+        end_time = datetime.strptime("12/31/2011", "%m/%d/%Y")  #datetime.strptime("09/25/2021", "%m/%d/%Y")
         self.ids=download_from_url(start_time,end_time)
         self.ids = [i if i.startswith('t3_') else f't3_{i}' for i in self.ids]
         self.search=int(len(self.ids))
@@ -46,6 +46,9 @@ class DownloadRedditPictures:
             os.makedirs(image_path)
     
     def savePictures(self,sub,image_path,ignore_path):
+        startTime=time.time()
+        count=0
+        failedCount=0
         for submission in self.reddit.info(self.ids):
             if "jpg" in submission.url.lower() or "png" in submission.url.lower():
                 try:
@@ -73,7 +76,14 @@ class DownloadRedditPictures:
 
                     if not ignore_flag:
                         cv2.imwrite(f"{image_path}{sub}-{submission.id}.png", image)
-                        print("Picture Saved!")
+                        count+=1
+                        print(count+"/" +len(self.ids))
                         
                 except Exception as e:
-                    print("Failed")
+                    count+=1
+                    failedCount+=1
+                    print(count+"/" +len(self.ids))
+        print("In total: "+failedCount +"pictures failed to save!")
+        endTime=len(time.time()-startTime)
+        td = timedelta(seconds=endTime)
+        print('Time in hh:mm:ss:', td)
