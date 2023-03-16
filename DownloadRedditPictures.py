@@ -78,12 +78,18 @@ class DownloadRedditPictures:
                         cv2.imwrite(f"{image_path}{sub}-{submission.id}.png", image)
                         count+=1
                         print(count+"/" +len(self.ids))
+                        endTime=len(time.time()-startTime)
+                        td = timedelta(seconds=endTime)
+                        print('Time elapsed in hh:mm:ss:', td)
                         
                 except Exception as e:
                     count+=1
                     failedCount+=1
                     print(count+"/" +len(self.ids))
+                    endTime=len(time.time()-startTime)
+                    td = timedelta(seconds=endTime)
+                    print('Time elapsed in hh:mm:ss:', td)
         print("In total: "+failedCount +"pictures failed to save!")
         endTime=len(time.time()-startTime)
         td = timedelta(seconds=endTime)
-        print('Time in hh:mm:ss:', td)
+        print('Time taken to finish in hh:mm:ss:', td)
