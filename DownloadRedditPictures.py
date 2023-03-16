@@ -49,13 +49,14 @@ class DownloadRedditPictures:
         startTime=time.time()
         count=0
         failedCount=0
-        f = open('submissions', 'w')
-        
+        f = open('submissions.csv', 'w')
+        writer=csv.writer(f)
+        header=["ID","Name","Number of comments","Score", "Url", "Upvote Ratio"]
+        writer.writerow(header)
 
         for submission in self.reddit.info(self.ids):
             if "jpg" in submission.url.lower() or "png" in submission.url.lower():
                 try:
-                    writer=csv.writer(f)
                     writer.writerow([submission.id, submission.name, submission.num_comments, submission.score,submission.url,submission.upvote_ratio])
                     if((int(submission.preview["images"][0]["resolutions"][5]["width"])<self.resize) or int(submission.preview["images"][0]["resolutions"][5]["height"])<self.resize):
                         resp= requests.get(submission.url.lower(), stream=True).raw
@@ -83,7 +84,7 @@ class DownloadRedditPictures:
                         cv2.imwrite(f"{image_path}{sub}-{submission.id}.png", image)
                         count+=1
                         print(str(count)+"/" +str(len(self.ids)))
-                        endTime=len(time.time()-startTime)
+                        endTime=int(time.time()-startTime)
                         td = timedelta(seconds=endTime)
                         print('Time elapsed in hh:mm:ss:', str(td))
                         
@@ -91,10 +92,10 @@ class DownloadRedditPictures:
                     count+=1
                     failedCount+=1
                     print(str(count)+"/" +str(len(self.ids)))
-                    endTime=len(time.time()-startTime)
+                    endTime=int(time.time()-startTime)
                     td = timedelta(seconds=endTime)
                     print('Time elapsed in hh:mm:ss:', str(td))
         print("In total: "+failedCount +"pictures failed to save!")
-        endTime=len(time.time()-startTime)
+        endTime=int(time.time()-startTime)
         td = timedelta(seconds=endTime)
         print('Time taken to finish in hh:mm:ss:', td)
