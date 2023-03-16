@@ -45,7 +45,7 @@ def download_from_url(start_datetime, end_datetime):
 			if end_datetime is not None and datetime.utcfromtimestamp(previous_epoch) < end_datetime:
 				break_out = True
 				break
-			ids.append(obj['id'])
+			ids.append(str(obj['id']))
 			count += 1
 			
 		if break_out:
