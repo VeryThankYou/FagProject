@@ -9,7 +9,11 @@ import multiprocessing
 from numba import jit, cuda
 from datetime import timedelta
 from utils.create_token import create_token
+
+
+
 class DownloadRedditPictures:
+    @jit(target_backend='cuda') 
     def __init__(self,search,resize):
         self.search=search
         self.resize=resize
