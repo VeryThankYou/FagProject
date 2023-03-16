@@ -53,11 +53,10 @@ class DownloadRedditPictures:
         writer=csv.writer(f)
         header=["ID","Name","Number of comments","Score", "Url", "Upvote Ratio"]
         writer.writerow(header)
-
         for submission in self.reddit.info(self.ids):
             if "jpg" in submission.url.lower() or "png" in submission.url.lower():
                 try:
-                    writer.writerow([submission.id, submission.name, submission.num_comments, submission.score,submission.url,submission.upvote_ratio])
+
                     if((int(submission.preview["images"][0]["resolutions"][5]["width"])<self.resize) or int(submission.preview["images"][0]["resolutions"][5]["height"])<self.resize):
                         resp= requests.get(submission.url.lower(), stream=True).raw
                     else:
@@ -87,6 +86,8 @@ class DownloadRedditPictures:
                         endTime=int(time.time()-startTime)
                         td = timedelta(seconds=endTime)
                         print('Time elapsed in hh:mm:ss:', str(td))
+                        writer=csv.writer(f)
+                        writer.writerow([submission.id, submission.name, submission.num_comments, submission.score,submission.url,submission.upvote_ratio])
                         
                 except Exception as e:
                     count+=1
