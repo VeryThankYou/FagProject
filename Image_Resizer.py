@@ -30,6 +30,7 @@ def resize_all(size):
         # checking if it is a file
         im = Image.open(f)
         resize(im, size).save(os.path.join(resize_directory, filename))
+        os.remove(f)
     endTime=int(time.time()-startTime)
     td=timedelta(seconds=endTime)
     print("Time elapsed in hh:mm:ss | "+str(td))

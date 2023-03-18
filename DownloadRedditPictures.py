@@ -5,7 +5,7 @@ import numpy as np
 import os
 import pickle
 import time
-
+import csv
 from numba import jit, cuda
 from datetime import timedelta
 from utils.create_token import create_token
@@ -16,7 +16,7 @@ class DownloadRedditPictures:
     def __init__(self,resize):
         self.resize=resize
         start_time = datetime.utcnow()  #datetime.strptime("10/05/2021", "%m/%d/%Y")
-        end_time = datetime.strptime("12/31/2011", "%m/%d/%Y")  #datetime.strptime("09/25/2021", "%m/%d/%Y")
+        end_time = datetime.strptime("01/09/2012", "%m/%d/%Y")  #datetime.strptime("09/25/2021", "%m/%d/%Y")
         self.ids=download_from_url(start_time,end_time)
         self.ids = [i if i.startswith('t3_') else f't3_{i}' for i in self.ids]
         self.search=int(len(self.ids))
@@ -49,9 +49,14 @@ class DownloadRedditPictures:
         startTime=time.time()
         count=0
         failedCount=0
+        f = open('submissions.csv', 'w')
+        writer=csv.writer(f)
+        header=["ID","Name","Number of comments","Score", "Url", "Upvote Ratio"]
+        writer.writerow(header)
         for submission in self.reddit.info(self.ids):
             if "jpg" in submission.url.lower() or "png" in submission.url.lower():
                 try:
+
                     if((int(submission.preview["images"][0]["resolutions"][5]["width"])<self.resize) or int(submission.preview["images"][0]["resolutions"][5]["height"])<self.resize):
                         resp= requests.get(submission.url.lower(), stream=True).raw
                     else:
@@ -77,19 +82,21 @@ class DownloadRedditPictures:
                     if not ignore_flag:
                         cv2.imwrite(f"{image_path}{sub}-{submission.id}.png", image)
                         count+=1
-                        print(count+"/" +len(self.ids))
-                        endTime=len(time.time()-startTime)
+                        print(str(count)+"/" +str(len(self.ids)))
+                        endTime=int(time.time()-startTime)
                         td = timedelta(seconds=endTime)
-                        print('Time elapsed in hh:mm:ss:', td)
+                        print('Time elapsed in hh:mm:ss:', str(td))
+                        writer=csv.writer(f)
+                        writer.writerow([submission.id, submission.name, submission.num_comments, submission.score,submission.url,submission.upvote_ratio])
                         
                 except Exception as e:
                     count+=1
                     failedCount+=1
-                    print(count+"/" +len(self.ids))
-                    endTime=len(time.time()-startTime)
+                    print(str(count)+"/" +str(len(self.ids)))
+                    endTime=int(time.time()-startTime)
                     td = timedelta(seconds=endTime)
-                    print('Time elapsed in hh:mm:ss:', td)
+                    print('Time elapsed in hh:mm:ss:', str(td))
         print("In total: "+failedCount +"pictures failed to save!")
-        endTime=len(time.time()-startTime)
+        endTime=int(time.time()-startTime)
         td = timedelta(seconds=endTime)
         print('Time taken to finish in hh:mm:ss:', td)
