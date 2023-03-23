@@ -5,11 +5,14 @@ import matplotlib.pyplot as plt
 from scipy import stats
 from PIL import Image
 
-os.chdir('/Volumes/Seagate Expansion Drive/Clara/DTU/Fagprojekt')
+#os.chdir('/Volumes/Seagate Expansion Drive/Clara/DTU/Fagprojekt')
 
 
 df = pd.read_csv("submissions.csv")
-upvotes = df["Score"]
+upvotes = df["Score"].to_numpy()
+logupvotes = np.log(upvotes+1)
+plt.hist(logupvotes)
+plt.show()
 
 data_description = {}
 
