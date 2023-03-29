@@ -34,3 +34,4 @@ def resize_all(size):
     endTime=int(time.time()-startTime)
     td=timedelta(seconds=endTime)
     print("Time elapsed in hh:mm:ss | "+str(td))
+
