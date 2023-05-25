@@ -1,5 +1,5 @@
 import numpy as np
-#np.object_ = object
+import pandas as pd
 import PIL
 import transformers as tf
 import torch
@@ -7,9 +7,30 @@ from PIL import Image
 import requests
 import sklearn.metrics as skm
 from datasets import load_dataset
+from sklearn.model_selection import train_test_split
 
-dataset = load_dataset("huggingface/cats-image")
-image = dataset["test"]["image"][0]
+df = pd.read_csv("submissions.csv")
+upvotes = df["Score"].to_numpy()
+logupvotes = np.log(upvotes+1)
+df["Logscore"] = logupvotes
+ids = df["ID"]
+
+
+
+def rename_ids():
+    newids = []
+    for e in ids:
+        newids.append("resized_images/EarthPorn-" + e + ".png")
+    return newids
+
+names = rename_ids()
+df["Filename"] = names
+df1000 = df.iloc[:1000]
+
+X = [PIL.Image.open(e) for e in df1000["Filename"]]
+y = df1000["Logscore"].to_numpy()
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.05)
+
 
 def compute_metrics_for_regression(eval_pred):
     logits, labels = eval_pred
@@ -25,17 +46,15 @@ def compute_metrics_for_regression(eval_pred):
 
 
 
-#impipeline = pipeline(model = "facebook/detr-resnet-50")
-#model = impipeline.model
 image = PIL.Image.open("resized_images/EarthPorn-1a3x6n.png")
 
 processor = tf.AutoImageProcessor.from_pretrained("microsoft/resnet-50")
 model = tf.ResNetForImageClassification.from_pretrained("microsoft/resnet-50", num_labels = 1, ignore_mismatched_sizes = True).to("cuda")
 
-"""""
+
 training_args = tf.TrainingArguments(
     output_dir ='./results',          
-    num_train_epochs = num_epochs,     
+    num_train_epochs = 2,     
     per_device_train_batch_size = 64,   
     per_device_eval_batch_size = 20,   
     weight_decay = 0.01,               
@@ -56,7 +75,7 @@ trainer = tf.Trainer(
     eval_dataset = valid_dataset,          
     compute_metrics = compute_metrics_for_regression,     
 )
-"""""
-#inputs = processor(images=image, return_tensors="pt")
-#outputs = model(**inputs)
-#print(outputs)
+
+inputs = processor(images=image, return_tensors="pt")
+outputs = model(**inputs)
+print(outputs)
