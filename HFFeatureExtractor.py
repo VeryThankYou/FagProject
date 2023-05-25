@@ -8,6 +8,21 @@ import requests
 import sklearn.metrics as skm
 from datasets import load_dataset
 from sklearn.model_selection import train_test_split
+from torch.utils.data import Dataset
+import matplotlib.pyplot as plt
+
+class CustomImageDataset(Dataset):
+    def __init__(self, Xs, ys):
+        self.img_labels = ys
+        self.inputs = Xs
+
+    def __len__(self):
+        return len(self.img_labels)
+
+    def __getitem__(self, idx):
+        image = {"inputs": self.inputs[idx]}
+        image["labels"] = self.img_labels[idx]
+        return image
 
 df = pd.read_csv("submissions.csv")
 upvotes = df["Score"].to_numpy()
@@ -26,8 +41,8 @@ def rename_ids():
 names = rename_ids()
 df["Filename"] = names
 df1000 = df.iloc[:1000]
+X = [Image.open(e) for e in df1000["Filename"]]
 
-X = [PIL.Image.open(e) for e in df1000["Filename"]]
 y = df1000["Logscore"].to_numpy()
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.05)
 
@@ -67,6 +82,9 @@ training_args = tf.TrainingArguments(
     save_strategy = "epoch",
 ) 
 
+train_dataset = CustomImageDataset(X_train, y_train)
+valid_dataset = CustomImageDataset(X_test, y_test)
+
 # Call the Trainer
 trainer = tf.Trainer(
     model = model,                         
@@ -76,6 +94,9 @@ trainer = tf.Trainer(
     compute_metrics = compute_metrics_for_regression,     
 )
 
-inputs = processor(images=image, return_tensors="pt")
-outputs = model(**inputs)
-print(outputs)
+trainer.train()
+trainer.evaluate()
+
+#inputs = processor(images=image, return_tensors="pt")
+#outputs = model(**inputs)
+#print(outputs)
