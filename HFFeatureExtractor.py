@@ -16,12 +16,13 @@ class CustomImageDataset(Dataset):
         self.img_labels = ys
         self.inputs = Xs
 
+
     def __len__(self):
         return len(self.img_labels)
 
     def __getitem__(self, idx):
-        image = {"inputs": self.inputs[idx]}
-        image["labels"] = self.img_labels[idx]
+        image = {"pixel_values": torch.as_tensor(self.inputs[idx]["pixel_values"][0]).float()}
+        image["labels"] = torch.as_tensor(self.img_labels[idx]).float()
         return image
 
 processor = tf.AutoImageProcessor.from_pretrained("microsoft/resnet-50")
@@ -67,7 +68,7 @@ def compute_metrics_for_regression(eval_pred):
 training_args = tf.TrainingArguments(
     output_dir ='./results',          
     num_train_epochs = 10,     
-    per_device_train_batch_size = 64,   
+    per_device_train_batch_size = 24,   
     per_device_eval_batch_size = 20,   
     weight_decay = 0.01,               
     learning_rate = 2e-5,
@@ -83,6 +84,7 @@ train_dataset = CustomImageDataset(X_train, y_train)
 valid_dataset = CustomImageDataset(X_test, y_test)
 
 
+
 # Call the Trainer
 trainer = tf.Trainer(
     model = model,                         
@@ -95,6 +97,12 @@ trainer = tf.Trainer(
 trainer.train()
 trainer.evaluate()
 
-#inputs = processor(images=image, return_tensors="pt")
-#outputs = model(**inputs)
-#print(outputs)
+image = Image.open(df["Filename"][9000])
+inputs = processor(image)
+
+
+with torch.no_grad():
+    logits = model(**inputs).logits
+predicted_label = logits.argmax(-1).item()
+print(model.config.id2label[predicted_label])
+print(y[0])
