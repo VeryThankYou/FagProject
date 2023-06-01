@@ -24,6 +24,9 @@ class CustomImageDataset(Dataset):
         image["labels"] = self.img_labels[idx]
         return image
 
+processor = tf.AutoImageProcessor.from_pretrained("microsoft/resnet-50")
+model = tf.ResNetForImageClassification.from_pretrained("microsoft/resnet-50", num_labels = 1, ignore_mismatched_sizes = True).to("cuda")
+
 df = pd.read_csv("submissions.csv")
 upvotes = df["Score"].to_numpy()
 logupvotes = np.log(upvotes+1)
@@ -41,11 +44,10 @@ def rename_ids():
 names = rename_ids()
 df["Filename"] = names
 df1000 = df.iloc[:1000]
-X = [Image.open(e) for e in df1000["Filename"]]
+X = [processor(Image.open(e)) for e in df1000["Filename"]]
 
 y = df1000["Logscore"].to_numpy()
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.05)
-
 
 def compute_metrics_for_regression(eval_pred):
     logits, labels = eval_pred
@@ -61,15 +63,10 @@ def compute_metrics_for_regression(eval_pred):
 
 
 
-image = PIL.Image.open("resized_images/EarthPorn-1a3x6n.png")
-
-processor = tf.AutoImageProcessor.from_pretrained("microsoft/resnet-50")
-model = tf.ResNetForImageClassification.from_pretrained("microsoft/resnet-50", num_labels = 1, ignore_mismatched_sizes = True).to("cuda")
-
 
 training_args = tf.TrainingArguments(
     output_dir ='./results',          
-    num_train_epochs = 2,     
+    num_train_epochs = 10,     
     per_device_train_batch_size = 64,   
     per_device_eval_batch_size = 20,   
     weight_decay = 0.01,               
@@ -84,6 +81,7 @@ training_args = tf.TrainingArguments(
 
 train_dataset = CustomImageDataset(X_train, y_train)
 valid_dataset = CustomImageDataset(X_test, y_test)
+
 
 # Call the Trainer
 trainer = tf.Trainer(
