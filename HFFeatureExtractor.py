@@ -8,7 +8,8 @@ import requests
 import sklearn.metrics as skm
 from datasets import load_dataset
 from sklearn.model_selection import train_test_split
-
+import os
+os.chdir("/Volumes/Seagate Expansion Drive/Clara/DTU/Fagprojekt")
 df = pd.read_csv("submissions.csv")
 upvotes = df["Score"].to_numpy()
 logupvotes = np.log(upvotes+1)
@@ -43,7 +44,6 @@ def compute_metrics_for_regression(eval_pred):
     smape = 1/len(labels) * np.sum(2 * np.abs(logits-labels) / (np.abs(labels) + np.abs(logits))*100)
 
     return {"mse": mse, "rmse": rmse, "mae": mae, "r2": r2, "smape": smape}
-
 
 
 image = PIL.Image.open("resized_images/EarthPorn-1a3x6n.png")
