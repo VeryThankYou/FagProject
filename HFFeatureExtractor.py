@@ -10,6 +10,18 @@ from datasets import load_dataset
 from sklearn.model_selection import train_test_split
 from torch.utils.data import Dataset
 import matplotlib.pyplot as plt
+from torchvision import utils
+
+def visTensor(tensor, ch=0, allkernels=False, nrow=8, padding=1): 
+    n,c,w,h = tensor.shape
+
+    if allkernels: tensor = tensor.view(n*c, -1, w, h)
+    elif c != 3: tensor = tensor[:,ch,:,:].unsqueeze(dim=1)
+
+    rows = np.min((tensor.shape[0] // nrow + 1, 64))    
+    grid = utils.make_grid(tensor, nrow=nrow, normalize=True, padding=padding)
+    plt.figure( figsize=(nrow,rows) )
+    plt.imshow(grid.numpy().transpose((1, 2, 0)))   
 
 class CustomImageDataset(Dataset):
     def __init__(self, Xs, ys):
@@ -97,12 +109,9 @@ trainer = tf.Trainer(
 trainer.train()
 trainer.evaluate()
 
-image = Image.open(df["Filename"][9000])
-inputs = processor(image)
+filters = torch.Tensor.cpu(model.resnet.embedder.embedder.convolution.weight.clone())
+visTensor(filters, ch=0, allkernels=False)
 
-
-with torch.no_grad():
-    logits = model(**inputs).logits
-predicted_label = logits.argmax(-1).item()
-print(model.config.id2label[predicted_label])
-print(y[0])
+plt.axis('off')
+plt.ioff()
+plt.show()
