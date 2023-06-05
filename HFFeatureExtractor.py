@@ -57,9 +57,13 @@ def rename_ids():
 names = rename_ids()
 df["Filename"] = names
 df1000 = df.iloc[:1000]
-X = [processor(Image.open(e)) for e in df1000["Filename"]]
+#X = [processor(Image.open(e)) for e in df1000["Filename"]]
+#y = df1000["Logscore"].to_numpy()
+dfnew = df.iloc[:10000]
+X = [processor(Image.open(e)) for e in dfnew["Filename"]]
+y = dfnew["Logscore"].to_numpy()
 
-y = df1000["Logscore"].to_numpy()
+
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.05)
 
 def compute_metrics_for_regression(eval_pred):
@@ -79,7 +83,7 @@ def compute_metrics_for_regression(eval_pred):
 
 training_args = tf.TrainingArguments(
     output_dir ='./results',          
-    num_train_epochs = 10,     
+    num_train_epochs = 100,     
     per_device_train_batch_size = 24,   
     per_device_eval_batch_size = 20,   
     weight_decay = 0.01,               
@@ -106,12 +110,20 @@ trainer = tf.Trainer(
     compute_metrics = compute_metrics_for_regression,     
 )
 
-trainer.train()
-trainer.evaluate()
-
 filters = torch.Tensor.cpu(model.resnet.embedder.embedder.convolution.weight.clone())
 visTensor(filters, ch=0, allkernels=False)
 
 plt.axis('off')
 plt.ioff()
-plt.show()
+plt.savefig("PretrainingVis")
+plt.clf()
+
+trainer.train()
+trainer.evaluate()
+
+filters = torch.Tensor.cpu(trainer.model.resnet.embedder.embedder.convolution.weight.clone())
+visTensor(filters, ch=0, allkernels=False)
+
+plt.axis('off')
+plt.ioff()
+plt.savefig("PosttrainingVis")
