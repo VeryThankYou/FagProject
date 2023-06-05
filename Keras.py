@@ -1,13 +1,11 @@
 from tensorflow import keras
 import imageio
-from tensorflow_docs.vis import embed
 import matplotlib.pyplot as plt
 import tensorflow as tf
 import numpy as np
 import pandas as pd
 from PIL import Image
 import os
-os.chdir("/Users/clarasofiechristiansen/Documents/Clara/DTU/Data_Fagprojekt/FagProject")
 
 batch_size = 20
 num_channels = 1
@@ -16,7 +14,7 @@ image_size = 600
 latent_dim = 128
 
 submissions = pd.read_csv('submissions.csv')
-data = submissions[0:1000]
+data = submissions
 upvotes = data["Score"].to_numpy()
 logupvotes = np.log(upvotes+1)
 data["Log_Upvotes"]=logupvotes
@@ -25,7 +23,7 @@ quantiles=[0.25,0.5,0.75]
 labels=np.quantile(data["Log_Upvotes"],quantiles)
 
 
-os.chdir("/Users/clarasofiechristiansen/Documents/Clara/DTU/Data_Fagprojekt/FagProject/resized_images/")
+os.chdir("resized_images/")
 X = np.zeros((len(data),600,600))
 y=np.zeros(len(data))
 for i, row in data.iterrows():
@@ -177,22 +175,7 @@ class ConditionalGAN(keras.Model):
         }
 
 
-"""# Save images
-class GANMonitor(keras.callbacks.Callback):
-    def __init__(self, num_img=1, latent_dim=128):
-        self.num_img = num_img
-        self.latent_dim = latent_dim
 
-    def on_epoch_end(self, epoch, logs=None):
-        random_latent_vectors = tf.random.normal(shape=(generator_in_channels,))
-        
-        for i in range(self.num_img):
-            generated_image = generator(random_latent_vectors[i], training=False)
-            generated_image = (generated_image * 0.5 + 0.5) * 255  # Rescale values to [0, 255]
-            img = keras.preprocessing.image.array_to_img(generated_image[i])
-            img.save("generated_img_{i}_{epoch}.png".format(i=i, epoch=epoch))
-cbk = GANMonitor(num_img=3, latent_dim=latent_dim)
-"""
 cond_gan = ConditionalGAN(
 discriminator=discriminator, generator=generator, latent_dim=latent_dim
 )
@@ -201,7 +184,7 @@ cond_gan.compile(
     g_optimizer=keras.optimizers.legacy.Adam(learning_rate=0.0003),
     loss_fn=keras.losses.BinaryCrossentropy(from_logits=True),
 )
-n_epochs = 1
+n_epochs = 100
 cond_gan.fit(dataset, epochs=n_epochs) #,callbacks=[cbk]
 
 
@@ -225,7 +208,7 @@ for i in range(4):
 plt.show()
 
 #Save images
-os.chdir("/Users/clarasofiechristiansen/Documents/Clara/DTU/Data_Fagprojekt/FagProject/GAN_keras_examples")
+os.chdir(os.path.dirname(os.path.abspath(__file__))+"/GAN_keras_examples")
 for i in range(num_samples):
     img = generated_images[i, :, :, :].numpy()
     img = keras.utils.array_to_img(img)
