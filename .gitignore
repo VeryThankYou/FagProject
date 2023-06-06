@@ -1,7 +1,10 @@
 /env
 /images
 /resized_images
+/resized_images512
+/resized_images256
 /ExamplePics
 __pycache__
 token.pickle
 submissions.csv
+resized_images256.zip

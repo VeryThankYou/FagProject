@@ -19,8 +19,10 @@ def resize(image, size):
 #resize(im).save("ExamplePics/0up1cmenb8ma1_resized.jpg")
 def resize_all(size):
     startTime=time.time()
-    directory = "images"
-    resize_directory = "resized_images"
+    #directory = "images"
+    #resize_directory = "resized_images"
+    directory = "resized_images"
+    resize_directory = "resized_images256"
     CHECK_FOLDER = os.path.isdir(resize_directory)
     if not CHECK_FOLDER:
         os.makedirs(resize_directory)
@@ -29,9 +31,11 @@ def resize_all(size):
         f = os.path.join(directory, filename)
         # checking if it is a file
         im = Image.open(f)
-        resize(im, size).save(os.path.join(resize_directory, filename))
-        os.remove(f)
+        resize(im, size).save(os.path.join(resize_directory, filename[:-3] + "jpg"))
+        #os.remove(f)
     endTime=int(time.time()-startTime)
     td=timedelta(seconds=endTime)
     print("Time elapsed in hh:mm:ss | "+str(td))
 
+if __name__ == "__main__":
+    resize_all(256)
