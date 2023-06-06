@@ -57,11 +57,11 @@ def rename_ids():
 names = rename_ids()
 df["Filename"] = names
 df1000 = df.iloc[:1000]
-#X = [processor(Image.open(e)) for e in df1000["Filename"]]
-#y = df1000["Logscore"].to_numpy()
+X = [processor(Image.open(e)) for e in df1000["Filename"]]
+y = df1000["Logscore"].to_numpy()
 dfnew = df.iloc[:10000]
-X = [processor(Image.open(e)) for e in dfnew["Filename"]]
-y = dfnew["Logscore"].to_numpy()
+#X = [processor(Image.open(e)) for e in dfnew["Filename"]]
+#y = dfnew["Logscore"].to_numpy()
 
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.05)
