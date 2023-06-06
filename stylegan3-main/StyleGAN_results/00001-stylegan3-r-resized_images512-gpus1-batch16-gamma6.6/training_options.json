@@ -1,0 +1,97 @@
+{
+  "G_kwargs": {
+    "class_name": "training.networks_stylegan3.Generator",
+    "z_dim": 512,
+    "w_dim": 512,
+    "mapping_kwargs": {
+      "num_layers": 2
+    },
+    "channel_base": 65536,
+    "channel_max": 1024,
+    "magnitude_ema_beta": 0.9994456359721023,
+    "conv_kernel": 1,
+    "use_radial_filters": true
+  },
+  "D_kwargs": {
+    "class_name": "training.networks_stylegan2.Discriminator",
+    "block_kwargs": {
+      "freeze_layers": 0
+    },
+    "mapping_kwargs": {},
+    "epilogue_kwargs": {
+      "mbstd_group_size": 4
+    },
+    "channel_base": 32768,
+    "channel_max": 512
+  },
+  "G_opt_kwargs": {
+    "class_name": "torch.optim.Adam",
+    "betas": [
+      0,
+      0.99
+    ],
+    "eps": 1e-08,
+    "lr": 0.0025
+  },
+  "D_opt_kwargs": {
+    "class_name": "torch.optim.Adam",
+    "betas": [
+      0,
+      0.99
+    ],
+    "eps": 1e-08,
+    "lr": 0.002
+  },
+  "loss_kwargs": {
+    "class_name": "training.loss.StyleGAN2Loss",
+    "r1_gamma": 6.6,
+    "blur_init_sigma": 0,
+    "blur_fade_kimg": 100.0
+  },
+  "data_loader_kwargs": {
+    "pin_memory": true,
+    "prefetch_factor": 2,
+    "num_workers": 3
+  },
+  "training_set_kwargs": {
+    "class_name": "training.dataset.ImageFolderDataset",
+    "path": "./datasets/resized_images512.zip",
+    "use_labels": false,
+    "max_size": 2107,
+    "xflip": true,
+    "resolution": 512,
+    "random_seed": 0
+  },
+  "num_gpus": 1,
+  "batch_size": 16,
+  "batch_gpu": 16,
+  "metrics": [
+    "fid50k_full"
+  ],
+  "total_kimg": 5,
+  "kimg_per_tick": 4,
+  "image_snapshot_ticks": 1,
+  "network_snapshot_ticks": 1,
+  "random_seed": 0,
+  "ema_kimg": 5.0,
+  "augment_kwargs": {
+    "class_name": "training.augment.AugmentPipe",
+    "xflip": 1,
+    "rotate90": 1,
+    "xint": 1,
+    "scale": 1,
+    "rotate": 1,
+    "aniso": 1,
+    "xfrac": 1,
+    "brightness": 1,
+    "contrast": 1,
+    "lumaflip": 1,
+    "hue": 1,
+    "saturation": 1
+  },
+  "ada_target": 0.6,
+  "resume_pkl": "https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-r-afhqv2-512x512.pkl",
+  "ada_kimg": 100,
+  "ema_rampup": null,
+  "run_dir": "./StyleGAN_results/00001-stylegan3-r-resized_images512-gpus1-batch16-gamma6.6"
+}

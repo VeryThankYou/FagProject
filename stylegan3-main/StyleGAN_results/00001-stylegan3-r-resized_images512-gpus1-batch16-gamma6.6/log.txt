@@ -1,0 +1,60 @@
+Loading training set...
+
+Num images:  4214
+Image shape: [3, 512, 512]
+Label shape: [0]
+
+Constructing networks...
+Resuming from "https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-r-afhqv2-512x512.pkl"
+Downloading https://api.ngc.nvidia.com/v2/models/nvidia/research/stylegan3/versions/1/files/stylegan3-r-afhqv2-512x512.pkl ... done
+Setting up PyTorch plugin "bias_act_plugin"... Failed!
+Traceback (most recent call last):
+  File "/zhome/51/7/168082/Desktop/Tester/stylegan3-main/train.py", line 286, in <module>
+    main() # pylint: disable=no-value-for-parameter
+  File "/zhome/51/7/168082/Desktop/Tester/test-env1/lib/python3.9/site-packages/click/core.py", line 1130, in __call__
+    return self.main(*args, **kwargs)
+  File "/zhome/51/7/168082/Desktop/Tester/test-env1/lib/python3.9/site-packages/click/core.py", line 1055, in main
+    rv = self.invoke(ctx)
+  File "/zhome/51/7/168082/Desktop/Tester/test-env1/lib/python3.9/site-packages/click/core.py", line 1404, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/zhome/51/7/168082/Desktop/Tester/test-env1/lib/python3.9/site-packages/click/core.py", line 760, in invoke
+    return __callback(*args, **kwargs)
+  File "/zhome/51/7/168082/Desktop/Tester/stylegan3-main/train.py", line 281, in main
+    launch_training(c=c, desc=desc, outdir=opts.outdir, dry_run=opts.dry_run)
+  File "/zhome/51/7/168082/Desktop/Tester/stylegan3-main/train.py", line 96, in launch_training
+    subprocess_fn(rank=0, c=c, temp_dir=temp_dir)
+  File "/zhome/51/7/168082/Desktop/Tester/stylegan3-main/train.py", line 47, in subprocess_fn
+    training_loop.training_loop(rank=rank, **c)
+  File "/zhome/51/7/168082/Desktop/Tester/stylegan3-main/training/training_loop.py", line 168, in training_loop
+    img = misc.print_module_summary(G, [z, c])
+  File "/zhome/51/7/168082/Desktop/Tester/stylegan3-main/torch_utils/misc.py", line 216, in print_module_summary
+    outputs = module(*inputs)
+  File "/zhome/51/7/168082/Desktop/Tester/test-env1/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1538, in _call_impl
+    result = forward_call(*args, **kwargs)
+  File "/zhome/51/7/168082/Desktop/Tester/stylegan3-main/training/networks_stylegan3.py", line 511, in forward
+    ws = self.mapping(z, c, truncation_psi=truncation_psi, truncation_cutoff=truncation_cutoff, update_emas=update_emas)
+  File "/zhome/51/7/168082/Desktop/Tester/test-env1/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1538, in _call_impl
+    result = forward_call(*args, **kwargs)
+  File "/zhome/51/7/168082/Desktop/Tester/stylegan3-main/training/networks_stylegan3.py", line 151, in forward
+    x = getattr(self, f'fc{idx}')(x)
+  File "/zhome/51/7/168082/Desktop/Tester/test-env1/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1538, in _call_impl
+    result = forward_call(*args, **kwargs)
+  File "/zhome/51/7/168082/Desktop/Tester/stylegan3-main/training/networks_stylegan3.py", line 100, in forward
+    x = bias_act.bias_act(x, b, act=self.activation)
+  File "/zhome/51/7/168082/Desktop/Tester/stylegan3-main/torch_utils/ops/bias_act.py", line 84, in bias_act
+    if impl == 'cuda' and x.device.type == 'cuda' and _init():
+  File "/zhome/51/7/168082/Desktop/Tester/stylegan3-main/torch_utils/ops/bias_act.py", line 41, in _init
+    _plugin = custom_ops.get_plugin(
+  File "/zhome/51/7/168082/Desktop/Tester/stylegan3-main/torch_utils/custom_ops.py", line 136, in get_plugin
+    torch.utils.cpp_extension.load(name=module_name, build_directory=cached_build_dir,
+  File "/zhome/51/7/168082/Desktop/Tester/test-env1/lib/python3.9/site-packages/torch/utils/cpp_extension.py", line 1284, in load
+    return _jit_compile(
+  File "/zhome/51/7/168082/Desktop/Tester/test-env1/lib/python3.9/site-packages/torch/utils/cpp_extension.py", line 1509, in _jit_compile
+    _write_ninja_file_and_build_library(
+  File "/zhome/51/7/168082/Desktop/Tester/test-env1/lib/python3.9/site-packages/torch/utils/cpp_extension.py", line 1601, in _write_ninja_file_and_build_library
+    extra_ldflags = _prepare_ldflags(
+  File "/zhome/51/7/168082/Desktop/Tester/test-env1/lib/python3.9/site-packages/torch/utils/cpp_extension.py", line 1699, in _prepare_ldflags
+    extra_ldflags.append(f'-L{_join_cuda_home("lib64")}')
+  File "/zhome/51/7/168082/Desktop/Tester/test-env1/lib/python3.9/site-packages/torch/utils/cpp_extension.py", line 2223, in _join_cuda_home
+    raise EnvironmentError('CUDA_HOME environment variable is not set. '
+OSError: CUDA_HOME environment variable is not set. Please set it to your CUDA install root.
