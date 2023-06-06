@@ -1,6 +1,7 @@
 /env
 /images
 /resized_images
+/resized_images512
 /ExamplePics
 __pycache__
 token.pickle
