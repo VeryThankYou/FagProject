@@ -63,6 +63,9 @@ dfnew = df.iloc[:10000]
 #X = [processor(Image.open(e)) for e in dfnew["Filename"]]
 #y = dfnew["Logscore"].to_numpy()
 
+BLpred = [np.mean(y) for i in range(len(y))]
+BLrmse = skm.mean_squared_error(y, BLpred, squared=False)
+print(BLrmse)
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.05)
 
