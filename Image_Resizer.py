@@ -1,9 +1,9 @@
 from PIL import Image
 import os
-from numba import jit, cuda
+#from numba import jit, cuda
 import time
 from datetime import timedelta
-@jit(target_backend='cuda') 
+#@jit(target_backend='cuda') 
 def webpToJpeg(string):
     im = Image.open(string).convert("RGB")
     im.save(string[:-4] + "jpg", "jpeg")
