@@ -8,3 +8,6 @@ __pycache__
 token.pickle
 submissions.csv
 resized_images256.zip
+/results
+/resultsHPC
+/logs
