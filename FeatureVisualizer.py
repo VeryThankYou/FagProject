@@ -36,9 +36,11 @@ df["Filename"] = names
 df20 = df.iloc[:20]
 
 processor = tf.AutoImageProcessor.from_pretrained("microsoft/resnet-50")
-model = tf.ResNetForImageClassification.from_pretrained("./results/checkpoint-39600", num_labels = 1, ignore_mismatched_sizes = True).to("cuda")
+model = tf.ResNetForImageClassification.from_pretrained("./resultsHPC/checkpoint-365100", num_labels = 1, ignore_mismatched_sizes = True).to("cuda")
+bestPic = df[df['Logscore']==df['Logscore'].max()]
+worstPic = df[df['Logscore']==df['Logscore'].min()]
 
-dummyX = torch.reshape(torch.as_tensor(processor(Image.open(df20["Filename"][0]))["pixel_values"][0]).float(), (-1, 3, 224, 224)).cuda()
+dummyX = torch.reshape(torch.as_tensor(processor(Image.open(bestPic["Filename"][bestPic.ID.index[0]]))["pixel_values"][0]).float(), (-1, 3, 224, 224)).cuda()
 plt.imshow(torch.Tensor.cpu(dummyX[0].permute(1, 2, 0)))
 plt.show()
 plt.clf()
@@ -48,24 +50,80 @@ firstLayerOutput = model.resnet.embedder(dummyX)
 filters = torch.Tensor.cpu(firstLayerOutput)
 secondLayerOutput = model.resnet.encoder.stages[0](firstLayerOutput)
 filters2 = torch.Tensor.cpu(secondLayerOutput)
+thirdLayerOutput = model.resnet.encoder.stages[1](secondLayerOutput)
+filters3 = torch.Tensor.cpu(thirdLayerOutput)
+fourthLayerOutput = model.resnet.encoder.stages[2](thirdLayerOutput)
+filters4 = torch.Tensor.cpu(fourthLayerOutput)
+print("Shapes of filters: " + str(filters.shape) + ", " + str(filters2.shape) + ", " + str(filters3.shape) + ", " + str(filters4.shape))
 
-square = 8
-ix = 1
-for _ in range(square):
+square = 4
+
+for screen in range(4):
+    ix = 1
+    
     for _ in range(square):
-        # specify subplot and turn of axis
-        ax = plt.subplot(square, square, ix)
-        ax.set_xticks([])
-        ax.set_yticks([])
-        # plot filter channel in grayscale
-        plt.imshow(filters[0,  ix-1, :, :].detach().numpy(), cmap='gray')
-        ix += 1
-        # show the figure
-plt.show()
-plt.clf()
+        for _ in range(square):
+            # specify subplot and turn of axis
+            ax = plt.subplot(square, square, ix)
+            ax.set_xticks([])
+            ax.set_yticks([])
+            # plot filter channel in grayscale
+            plt.imshow(filters[0,  screen * 16 + ix-1, :, :].detach().numpy(), cmap='gray')
+            ix += 1
+            # show the figure
+    plt.suptitle("Embedding layer features, page " + str(screen + 1) + "/4")
+    plt.savefig("ExtractedFeatures/BestPicEmbLay" + str(screen + 1) + "_4.png")
+    #plt.show()
+    plt.clf()
 
-plt.imshow(filters2[0,  0, :, :].detach().numpy(), cmap='gray')
-plt.show()
+for screen in range(16):
+    ix = 1
+    for _ in range(square):
+        for _ in range(square):
+            # specify subplot and turn of axis
+            ax = plt.subplot(square, square, ix)
+            ax.set_xticks([])
+            ax.set_yticks([])
+            # plot filter channel in grayscale
+            plt.imshow(filters2[0,  screen * 16 + ix-1, :, :].detach().numpy(), cmap='gray')
+            ix += 1
+            # show the figure
+    plt.suptitle("First ResNet stage features, page " + str(screen + 1) + "/16")
+    plt.savefig("ExtractedFeatures/BestPicEncLay1_" + str(screen + 1) + "_16.png")
+    #plt.show()
+    plt.clf()
+
+for screen in range(32):
+    ix = 1
+    for _ in range(square):
+        for _ in range(square):
+            # specify subplot and turn of axis
+            ax = plt.subplot(square, square, ix)
+            ax.set_xticks([])
+            ax.set_yticks([])
+            # plot filter channel in grayscale
+            plt.imshow(filters3[0,  screen * 16 + ix-1, :, :].detach().numpy(), cmap='gray')
+            ix += 1
+            # show the figure
+    plt.suptitle("Second ResNet stage features, page " + str(screen + 1) + "/32")
+    #plt.show()
+    plt.clf()
+
+for screen in range(64):
+    ix = 1
+    for _ in range(square):
+        for _ in range(square):
+            # specify subplot and turn of axis
+            ax = plt.subplot(square, square, ix)
+            ax.set_xticks([])
+            ax.set_yticks([])
+            # plot filter channel in grayscale
+            plt.imshow(filters4[0,  screen * 16 + ix-1, :, :].detach().numpy(), cmap='gray')
+            ix += 1
+            # show the figure
+    plt.suptitle("Second ResNet stage features, page " + str(screen + 1) + "/64")
+    #plt.show()
+    plt.clf()
 # Code for saving model as torch model
 #dummyX = torch.reshape(torch.as_tensor(processor(Image.open(df20["Filename"][0]))["pixel_values"][0]).float(), (-1, 3, 224, 224)).cuda()
 #y = df20["Logscore"].to_numpy()
@@ -75,8 +133,6 @@ plt.show()
 
 
 
-feature_extractor = create_feature_extractor(model, return_nodes=['.resnet.embedder'])
+#feature_extractor = create_feature_extractor(model, return_nodes=['.resnet.embedder'])
 
 #nodes, _ = get_graph_node_names(model)
-
-print(model)
