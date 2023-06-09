@@ -40,7 +40,7 @@ model = tf.ResNetForImageClassification.from_pretrained("./resultsHPC/checkpoint
 bestPic = df[df['Logscore']==df['Logscore'].max()]
 worstPic = df[df['Logscore']==df['Logscore'].min()]
 
-dummyX = torch.reshape(torch.as_tensor(processor(Image.open(bestPic["Filename"][bestPic.ID.index[0]]))["pixel_values"][0]).float(), (-1, 3, 224, 224)).cuda()
+dummyX = torch.reshape(torch.as_tensor(processor(Image.open(worstPic["Filename"][worstPic.ID.index[0]]))["pixel_values"][0]).float(), (-1, 3, 224, 224)).cuda()
 plt.imshow(torch.Tensor.cpu(dummyX[0].permute(1, 2, 0)))
 plt.show()
 plt.clf()
@@ -54,10 +54,16 @@ thirdLayerOutput = model.resnet.encoder.stages[1](secondLayerOutput)
 filters3 = torch.Tensor.cpu(thirdLayerOutput)
 fourthLayerOutput = model.resnet.encoder.stages[2](thirdLayerOutput)
 filters4 = torch.Tensor.cpu(fourthLayerOutput)
-print("Shapes of filters: " + str(filters.shape) + ", " + str(filters2.shape) + ", " + str(filters3.shape) + ", " + str(filters4.shape))
+firstPointFifthLayerOutput = model.resnet.encoder.stages[0].layers[0](firstLayerOutput)
+filters1_5 = torch.Tensor.cpu(firstPointFifthLayerOutput)
+
+print("Shapes of filters: " + str(filters.shape) + ", " + str(filters2.shape) + ", " + str(filters3.shape) + ", " + str(filters4.shape) + ", " + str(filters1_5.shape))
+
+
 
 square = 4
 
+"""
 for screen in range(4):
     ix = 1
     
@@ -75,7 +81,9 @@ for screen in range(4):
     plt.savefig("ExtractedFeatures/BestPicEmbLay" + str(screen + 1) + "_4.png")
     #plt.show()
     plt.clf()
+"""
 
+"""
 for screen in range(16):
     ix = 1
     for _ in range(square):
@@ -90,6 +98,24 @@ for screen in range(16):
             # show the figure
     plt.suptitle("First ResNet stage features, page " + str(screen + 1) + "/16")
     plt.savefig("ExtractedFeatures/BestPicEncLay1_" + str(screen + 1) + "_16.png")
+    #plt.show()
+    plt.clf()
+"""
+
+for screen in range(16):
+    ix = 1
+    for _ in range(square):
+        for _ in range(square):
+            # specify subplot and turn of axis
+            ax = plt.subplot(square, square, ix)
+            ax.set_xticks([])
+            ax.set_yticks([])
+            # plot filter channel in grayscale
+            plt.imshow(filters1_5[0,  screen * 16 + ix-1, :, :].detach().numpy(), cmap='gray')
+            ix += 1
+            # show the figure
+    plt.suptitle("First ResNet block features, page " + str(screen + 1) + "/16")
+    plt.savefig("ExtractedFeatures/WorstPicEncBlock1_" + str(screen + 1) + "_16.png")
     #plt.show()
     plt.clf()
 
