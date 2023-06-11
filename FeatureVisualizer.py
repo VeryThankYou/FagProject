@@ -40,7 +40,7 @@ model = tf.ResNetForImageClassification.from_pretrained("./resultsHPC/checkpoint
 bestPic = df[df['Logscore']==df['Logscore'].max()]
 worstPic = df[df['Logscore']==df['Logscore'].min()]
 
-dummyX = torch.reshape(torch.as_tensor(processor(Image.open(worstPic["Filename"][worstPic.ID.index[0]]))["pixel_values"][0]).float(), (-1, 3, 224, 224)).cuda()
+dummyX = torch.reshape(torch.as_tensor(processor(Image.open(bestPic["Filename"][bestPic.ID.index[0]]))["pixel_values"][0]).float(), (-1, 3, 224, 224)).cuda()
 plt.imshow(torch.Tensor.cpu(dummyX[0].permute(1, 2, 0)))
 plt.show()
 plt.clf()
@@ -59,7 +59,20 @@ filters1_5 = torch.Tensor.cpu(firstPointFifthLayerOutput)
 
 print("Shapes of filters: " + str(filters.shape) + ", " + str(filters2.shape) + ", " + str(filters3.shape) + ", " + str(filters4.shape) + ", " + str(filters1_5.shape))
 
+plt.imshow(filters[0,  25, :, :].detach().numpy(), cmap='gray')
+plt.savefig("ExtractedFeatures/BestPicEmbLayFilter26.png")
+plt.show()
+plt.clf()
 
+plt.imshow(filters[0,  50, :, :].detach().numpy(), cmap='gray')
+plt.savefig("ExtractedFeatures/BestPicEmbLayFilter51.png")
+plt.show()
+plt.clf()
+
+plt.imshow(filters[0,  63, :, :].detach().numpy(), cmap='gray')
+plt.savefig("ExtractedFeatures/BestPicEmbLayFilter64.png")
+plt.show()
+plt.clf()
 
 square = 4
 
