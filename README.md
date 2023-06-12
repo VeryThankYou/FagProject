@@ -9,10 +9,13 @@ In the following we will give an overview of this Github Repository.
 The folder prepare data contains the files associated with acquiring the data found in the "Data"-folder. In the file postDownloader.py the API Pushshift was used to obtain 420.000 IDs of images from the subreddit "EartPorn". 
 In the file main.py the functions of DownloadRedditPictures.py are called. This function uses Reddit's own API praw to download images from the subreddit via the IDs obtained earlier. 
 The images were resized with Image_Resizer.py. The desired dimensions turned out to be 256x256 as both our models had these as input dimensions. The figure below displays the examples of images found in the dataset.
-![Image Link](https://github.com/VeryThankYou/FagProject/blob/Organized/readme_images/10epochs.png)
+
+![Image Link](https://github.com/VeryThankYou/FagProject/blob/Organized/readme_images/Data.png)
 
 ## ResNet
 HFFeatureExtractor is the file for our feature extracting CNN.
+
+![Image Link](https://github.com/VeryThankYou/FagProject/blob/Organized/readme_images/FeatureExtraction.png)
 
 ## GAN
 The GAN folder contains a failed attempt (Keras.py) to build a GAN from scratch. The results from one of its runs (see figure below) are discussed in the report and made us explore other possibilities. 
