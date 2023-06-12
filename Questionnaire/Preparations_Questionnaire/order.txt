@@ -1,0 +1,48 @@
+Image1:Image2:Image3:Image4
+0:2:1:3 1
+0:3:1:2 2
+0:1:3:2 3
+2:3:1:0 4
+0:1:2:3 5 
+1:0:3:2 6
+0:3:1:2 7
+1:3:0:2 8
+3:2:0:1 9
+2:0:1:3 10
+1:3:0:2 11
+2:0:3:1 12
+2:0:1:3 13
+0:3:2:1 14
+0:3:2:1 15
+1:3:2:0 16
+./images/combined0_3.png:./images/combined0_1.png:./images/combined0_0.png:./images/combined0_2.png:
+./images/combined1_3.png:./images/combined1_1.png:./images/combined1_2.png:./images/combined1_0.png:
+./images/combined2_1.png:./images/combined2_2.png:./images/combined2_3.png:./images/combined2_0.png:
+./images/combined3_3.png:./images/combined3_1.png:./images/combined3_0.png:./images/combined3_2.png:
+./images/combined4_0.png:./images/combined4_2.png:./images/combined4_1.png:./images/combined4_3.png:
+./images/combined5_3.png:./images/combined5_1.png:./images/combined5_2.png:./images/combined5_0.png:
+./images/combined6_0.png:./images/combined6_1.png:./images/combined6_2.png:./images/combined6_3.png:
+./images/combined7_0.png:./images/combined7_2.png:./images/combined7_1.png:./images/combined7_3.png:
+./images/combined8_3.png:./images/combined8_0.png:./images/combined8_1.png:./images/combined8_2.png:
+./images/combined9_2.png:./images/combined9_3.png:./images/combined9_0.png:./images/combined9_1.png:
+./images/combined10_2.png:./images/combined10_1.png:./images/combined10_0.png:./images/combined10_3.png:
+./images/combined11_1.png:./images/combined11_2.png:./images/combined11_0.png:./images/combined11_3.png:
+./images/combined12_3.png:./images/combined12_1.png:./images/combined12_0.png:./images/combined12_2.png:
+./images/combined13_2.png:./images/combined13_1.png:./images/combined13_3.png:./images/combined13_0.png:
+./images/combined14_3.png:./images/combined14_0.png:./images/combined14_1.png:./images/combined14_2.png:
+./images/combined15_3.png:./images/combined15_1.png:./images/combined15_0.png:./images/combined15_2.png:
+./images/combined16_0.png:./images/combined16_2.png:./images/combined16_1.png:./images/combined16_3.png:
+./images/combined17_3.png:./images/combined17_1.png:./images/combined17_0.png:./images/combined17_2.png:
+./images/combined18_3.png:./images/combined18_1.png:./images/combined18_2.png:./images/combined18_0.png:
+./images/combined19_1.png:./images/combined19_3.png:./images/combined19_2.png:./images/combined19_0.png:
+./images/combined20_2.png:./images/combined20_3.png:./images/combined20_1.png:./images/combined20_0.png:
+./images/combined21_3.png:./images/combined21_0.png:./images/combined21_2.png:./images/combined21_1.png:
+./images/combined22_1.png:./images/combined22_0.png:./images/combined22_2.png:./images/combined22_3.png:
+./images/combined23_3.png:./images/combined23_0.png:./images/combined23_2.png:./images/combined23_1.png:
+./images/combined24_1.png:./images/combined24_2.png:./images/combined24_0.png:./images/combined24_3.png:
+./images/combined25_2.png:./images/combined25_1.png:./images/combined25_3.png:./images/combined25_0.png:
+./images/combined26_1.png:./images/combined26_3.png:./images/combined26_2.png:./images/combined26_0.png:
+./images/combined27_1.png:./images/combined27_0.png:./images/combined27_2.png:./images/combined27_3.png:
+./images/combined28_1.png:./images/combined28_2.png:./images/combined28_0.png:./images/combined28_3.png:
+./images/combined29_2.png:./images/combined29_1.png:./images/combined29_3.png:./images/combined29_0.png:
+./images/combined30_3.png:./images/combined30_1.png:./images/combined30_2.png:./images/combined30_0.png:
