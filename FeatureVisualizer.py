@@ -1,12 +1,9 @@
-from torchvision.models.feature_extraction import create_feature_extractor, get_graph_node_names
 import transformers as tf
 import torch
 import numpy as np
 import matplotlib.pyplot as plt
-from transformers.utils.fx import symbolic_trace
 import pandas as pd
 from PIL import Image
-from torchvision import utils
 
 df = pd.read_csv("submissions.csv")
 upvotes = df["Score"].to_numpy()
@@ -14,16 +11,6 @@ logupvotes = np.log(upvotes+1)
 df["Logscore"] = logupvotes
 ids = df["ID"]
 
-def visTensor(tensor, ch=0, allkernels=False, nrow=8, padding=1): 
-    n,c,w,h = tensor.shape
-
-    if allkernels: tensor = tensor.view(n*c, -1, w, h)
-    elif c != 3: tensor = tensor[:,ch,:,:].unsqueeze(dim=1)
-
-    rows = np.min((tensor.shape[0] // nrow + 1, 64))    
-    grid = utils.make_grid(tensor, nrow=nrow, normalize=True, padding=padding)
-    plt.figure( figsize=(nrow,rows) )
-    plt.imshow(grid.numpy().transpose((1, 2, 0)))   
 
 def rename_ids():
     newids = []

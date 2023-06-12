@@ -62,16 +62,25 @@ for i in range(stackedResponses.shape[0]):
     if votes[3] == 0:
         bestIsBest = bestIsBest + 1
 
-print(stackedResponses.shape)
-print(hyp1/stackedResponses.shape[0])
-print(hyp2/stackedResponses.shape[0])
-print(hyp3/stackedResponses.shape[0])
-print(hyp4/stackedResponses.shape[0])
-print(hyp5/stackedResponses.shape[0])
-print(bestIsBest/stackedResponses.shape[0])
-
 nobs = stackedResponses.shape[0]
 value = 0.5
+
+print(stackedResponses.shape)
+print(hyp1/nobs)
+print(hyp2/nobs)
+print(hyp3/nobs)
+print(hyp4/nobs)
+print(hyp5/nobs)
+print(bestIsBest/nobs)
+hypcounts = [hyp1, hyp2, hyp3, hyp4, hyp5]
+table = {"Proportions": [hyp/nobs for hyp in hypcounts]}
+statpval = [proportions_ztest(hyp, nobs, value, alternative = "larger") for hyp in hypcounts]
+table["Test statistic"] = [e[0] for e in statpval]
+table["P-value"] = [e[1] for e in statpval]
+table = pd.DataFrame(data=table)
+print(table)
+
+
 
 stat, pval = proportions_ztest(hyp5, nobs, value, alternative = "larger")
 print(pval)
