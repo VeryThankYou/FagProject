@@ -1,66 +1,115 @@
-import numpy as np
-import pandas as pd
-import PIL
-import transformers as tf
-import torch
-from PIL import Image
-import requests
-import sklearn.metrics as skm
+# load vgg model
+from keras.applications.resnet import ResNet50
+from keras.preprocessing.image import ImageDataGenerator
 from sklearn.model_selection import train_test_split
-from torch.utils.data import Dataset
-import matplotlib.pyplot as plt
-from torchvision import utils, transforms
+from PIL import Image
 
-def visTensor(tensor, ch=0, allkernels=False, nrow=8, padding=1): 
-    n,c,w,h = tensor.shape
-
-    if allkernels: tensor = tensor.view(n*c, -1, w, h)
-    elif c != 3: tensor = tensor[:,ch,:,:].unsqueeze(dim=1)
-
-    rows = np.min((tensor.shape[0] // nrow + 1, 64))    
-    grid = utils.make_grid(tensor, nrow=nrow, normalize=True, padding=padding)
-    plt.figure( figsize=(nrow,rows) )
-    plt.imshow(grid.numpy().transpose((1, 2, 0)))   
-
-class CustomImageDataset(Dataset):
-    def __init__(self, Xs, ys):
-        self.img_labels = ys
-        self.inputs = Xs
+import pandas as pd
+import numpy as np
 
 
-    def __len__(self):
-        return len(self.img_labels)
+from keras.applications.vgg16 import preprocess_input
+from keras.utils import load_img
+from keras.utils import img_to_array
+from keras.models import Model
+from matplotlib import pyplot
+from numpy import expand_dims
 
-    def __getitem__(self, idx):
-        image = {"pixel_values": torch.as_tensor(self.inputs[idx]["pixel_values"][0]).float()}
-        image["labels"] = torch.as_tensor(self.img_labels[idx]).float()
-        return image
+# load the model
+model = ResNet50(
+    include_top=True,
+    weights="imagenet",
+    input_tensor=None,
+    input_shape=None,
+    pooling=None,
+    classes=1000,
+)
+# summarize the model
+model = Model(inputs=model.inputs, outputs=model.layers[2].output)
+model.summary()
 
-processor = tf.AutoImageProcessor.from_pretrained("microsoft/resnet-50")
-model = tf.ResNetForImageClassification.from_pretrained("microsoft/resnet-50", num_labels = 1, ignore_mismatched_sizes = True)
+img = load_img('bird.jpg', target_size=(224, 224))
+# convert the image to an array
+img = img_to_array(img)
+# expand dimensions so that it represents a single 'sample'
+img = expand_dims(img, axis=0)
+# prepare the image (e.g. scale pixel values for the vgg)
+img = preprocess_input(img)
+# get feature map for first hidden layer
+feature_maps = model.predict(img)
+# plot all 64 maps in an 8x8 squares
+square = 8
+ix = 1
+for _ in range(square):
+    for _ in range(square):
+        # specify subplot and turn of axis
+        ax = pyplot.subplot(square, square, ix)
+        ax.set_xticks([])
+        ax.set_yticks([])
+        # plot filter channel in grayscale
+        pyplot.imshow(feature_maps[0, :, :, ix-1], cmap='gray')
+        ix += 1
+pyplot.show()
 
-model.eval()
-image = Image.open('./resized_images/EarthPorn-1a0gxo.png').convert('RGB')
-preprocess = transforms.Compose([
-    transforms.Resize(256),
-    transforms.CenterCrop(224),
-    transforms.ToTensor(),
-    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-])
-input_image = preprocess(image)
-input_batch = input_image.unsqueeze(0)
+#############################################
+# Data
+data = pd.read_csv("submissions.csv")
+logupvotes = np.log(data["Score"].to_numpy()+1)
+data["Logscore"] = logupvotes
 
-with torch.no_grad():
-    intermediate_layer_outputs = model.conv1(input_batch)
-    for layer in model.layer1:
-        intermediate_layer_outputs = layer(intermediate_layer_outputs)
-    for layer in model.layer2:
-        intermediate_layer_outputs = layer(intermediate_layer_outputs)
-    for layer in model.layer3:
-        intermediate_layer_outputs = layer(intermediate_layer_outputs)
-    for layer in model.layer4:
-        intermediate_layer_outputs = layer(intermediate_layer_outputs)
+def rename_ids(ids):
+    newids = []
+    for e in ids:
+        name = "resized_images/EarthPorn-" + e + ".png"
+        newids.append(name)
+    return newids
+result = rename_ids(data['ID'])
+data["Filename"] = result
 
-desired_layer_output = intermediate_layer_outputs
+np_pictures = np.zeros((len(result),600,600,3))
 
-feature_vector = desired_layer_output.view(desired_layer_output.size(0), -1)
+for i, file in enumerate(data["Filename"]):
+    image = load_img(file)
+    # convert image to numpy array
+    np_pictures[i] = np.asarray(image)   
+    print(i)
+datagen = ImageDataGenerator(
+    rescale = 1./255)
+
+
+
+df1000 = data.iloc[:1000]
+X = datagen.fit(df1000["Pictures"])
+y = df1000["Logscore"].to_numpy()
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.05)
+
+
+
+# Get ResNet-50 Model
+def getResNet50Model(lastFourTrainable=False):
+  resnet_model = ResNet50(weights='imagenet', input_shape=input_shape, include_top=True)
+
+  # Make all layers non-trainable
+  for layer in resnet_model.layers[:]:
+      layer.trainable = False
+
+  # Add fully connected layer which have 1024 neuron to ResNet-50 model
+  output = resnet_model.get_layer('avg_pool').output
+  output = Flatten(name='new_flatten')(output)
+  output = Dense(units=1024, activation='relu', name='new_fc')(output)
+  output = Dense(units=10, activation='softmax')(output)
+  resnet_model = Model(resnet_model.input, output)
+
+  # Make last 4 layers trainable if lastFourTrainable == True
+  if lastFourTrainable == True:
+    resnet_model.get_layer('conv5_block3_2_bn').trainable = True
+    resnet_model.get_layer('conv5_block3_3_conv').trainable = True
+    resnet_model.get_layer('conv5_block3_3_bn').trainable = True
+    resnet_model.get_layer('new_fc').trainable = True
+
+  # Compile ResNet-50 model
+  resnet_model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+  resnet_model.summary()
+  
+  return resnet_model
