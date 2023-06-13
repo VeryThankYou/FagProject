@@ -23,7 +23,7 @@ The GAN folder contains a failed attempt (Keras.py) to build a GAN from scratch.
 ![Image Link](https://github.com/VeryThankYou/FagProject/blob/Organized/readme_images/10epochs.png)
 
 ## StyleGAN3
-The StyleGAN3 folder contains the files necessary to train the pretrained StyleGAN3. In the stylegan3-main holds the snapshot of the pretrained StyleGAN3 (.pkl file) and a folder called datasets which contains the zipped dataset. 
+The StyleGAN3 folder contains the files necessary to train the pretrained StyleGAN3. The stylegan3-main holds the snapshot of the pretrained StyleGAN3 (.pkl file) and a folder called datasets which contains the zipped dataset. 
 The splitter splits the resulting snapshots into individual images and combined the images with the same seed across the models trained on different datasets.
 
 ![Image Link](https://github.com/VeryThankYou/FagProject/blob/Organized/readme_images/combined164.png)
