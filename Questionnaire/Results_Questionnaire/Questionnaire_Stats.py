@@ -11,11 +11,13 @@ translator = [{int(i): int(e) for i, e in enumerate(line.split(":"))} for line i
 
 
 df = pd.read_csv("FormResponses.csv")
-df = df[df["Consent"] == "I consent"]
+df = df[df.iloc[:, 1] == "I consent"]
+
+
 stackedResponses = np.zeros((df.shape[0] * 16, 4))
 for i in range(16):
-    indices = ["Q" + str(i + 1) + "Best" + str(i2 + 1) for i2 in range(4)]
-    dfQ = df[indices]
+    #indices = ["Q" + str(i + 1) + "Best" + str(i2 + 1) for i2 in range(4)]
+    dfQ = df.iloc[:, (2 + i * 4):(2 + (i + 1) * 4)]
     for i2 in range(4):
         column = dfQ.iloc[:, i2]
         col2 = [int(e[-1]) for e in column]
@@ -43,7 +45,11 @@ hyp4 = 0
 # Good data is better than bad data
 hyp5 = 0
 
+# Kinda hypothesis
 bestIsBest = 0
+
+# Kinda hypothesis 2
+worstPreIsWorst = 0
 
 for i in range(stackedResponses.shape[0]):
     question = int(i / df.shape[0])
@@ -62,6 +68,8 @@ for i in range(stackedResponses.shape[0]):
         hyp5 = hyp5 + 1
     if votes[3] == 0:
         bestIsBest = bestIsBest + 1
+    if votes[0] == 3 or votes[1] == 3:
+        worstPreIsWorst = worstPreIsWorst + 1
 
 nobs = stackedResponses.shape[0]
 value = 0.5
@@ -75,7 +83,7 @@ print(hyp5/nobs)
 print(bestIsBest/nobs)
 hypcounts = [hyp1, hyp2, hyp3, hyp4, hyp5]
 table = {"Proportions": [hyp/nobs for hyp in hypcounts]}
-statpval = [proportions_ztest(hyp, nobs, value, alternative = "larger") for hyp in hypcounts]
+statpval = [proportions_ztest(hyp, nobs, value, alternative = "larger", prop_var=value) for hyp in hypcounts]
 table["Test statistic"] = [e[0] for e in statpval]
 table["P-value"] = [e[1] for e in statpval]
 table = pd.DataFrame(data=table)
@@ -83,9 +91,10 @@ print(table)
 
 
 
-stat, pval = proportions_ztest(hyp5, nobs, value, alternative = "larger")
+
+
+stat, pval = proportions_ztest(bestIsBest, nobs, 0.25, alternative = "larger", prop_var=0.25)
 print(pval)
 
-
-stat, pval = proportions_ztest(bestIsBest, nobs, 0.25, alternative = "larger")
+stat, pval = proportions_ztest(worstPreIsWorst, nobs, 0.5, alternative = "larger", prop_var=0.5)
 print(pval)
