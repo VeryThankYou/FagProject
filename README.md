@@ -6,6 +6,8 @@ With a Generative Adversarial Network (GAN) the goal is to generate nature image
 In the following we will give an overview of this Github Repository.
 
 ## NOTE
+Several scripts uses CUDA to utilize the cores of NVIDIA GPUs. To use these scripts you need NVIDIA GPU, CUDA software and the CUDA version of PyTorch.
+
 GitHub limits the size of files and folder to 100 MB. As a result of this rule, some folders and files are not uploaded to this repository. The following structure should be implemented for the code to work flawless:
 - A folder called Data has to hold submission.csv which has the columns "Score" (upvotes) and "ID" and a folder resized_images256 containing the images as .jpg files with the dimensions 256x256 (which can be produced by the files in the Prepare_Data folder). The data can be found here under the names submissions86000.csv and resized_images.zip: https://drive.google.com/drive/folders/1R4O8abUPCkbYx5PcVdN6dWPocCMfRSwY?usp=sharing
 - In the following path: /StyleGAN3/stylegan3-main/datasets the folder is supposed to contain the datasets used for training the pretrained StyleGAN3. These includes all_data256.zip, best_data256.zip and worst_data256.zip. The datasets are uploaded to Google Drive and can be found here: https://drive.google.com/drive/folders/1R4O8abUPCkbYx5PcVdN6dWPocCMfRSwY?usp=sharing
