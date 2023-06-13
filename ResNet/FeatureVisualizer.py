@@ -1,15 +1,13 @@
-from torchvision.models.feature_extraction import create_feature_extractor, get_graph_node_names
 import transformers as tf
 import torch
 import numpy as np
 import matplotlib.pyplot as plt
-from transformers.utils.fx import symbolic_trace
 import pandas as pd
 from PIL import Image
-from torchvision import utils
 import os
 
-os.chdir(os.getcwd()+"/Data")
+origDir = os.getcwd()
+os.chdir(origDir+"/Data")
 df = pd.read_csv("submissions.csv")
 upvotes = df["Score"].to_numpy()
 logupvotes = np.log(upvotes+1)
@@ -26,8 +24,15 @@ names = rename_ids()
 df["Filename"] = names
 df20 = df.iloc[:20]
 
+os.chdir(origDir + "/ResNet")
 processor = tf.AutoImageProcessor.from_pretrained("microsoft/resnet-50")
-model = tf.ResNetForImageClassification.from_pretrained("./resultsHPC/checkpoint-365100", num_labels = 1, ignore_mismatched_sizes = True).to("cuda")
+lastCheckpoint = 0
+for filename in os.listdir(os.getcwd() + "/resultsHPC"):
+    f = os.path.join(os.getcwd() + "/resultsHPC", filename)
+    num = int(f.split("-")[-1])
+    if num > lastCheckpoint:
+        lastCheckpoint = num
+model = tf.ResNetForImageClassification.from_pretrained("./resultsHPC/checkpoint-"+str(lastCheckpoint), num_labels = 1, ignore_mismatched_sizes = True).to("cuda")
 bestPic = df[df['Logscore']==df['Logscore'].max()]
 worstPic = df[df['Logscore']==df['Logscore'].min()]
 
@@ -121,7 +126,7 @@ for screen in range(16):
             ix += 1
             # show the figure
     plt.suptitle("First ResNet block features, page " + str(screen + 1) + "/16")
-    plt.savefig("ExtractedFeatures/WorstPicEncBlock1_" + str(screen + 1) + "_16.png")
+    #plt.savefig("ExtractedFeatures/WorstPicEncBlock1_" + str(screen + 1) + "_16.png")
     #plt.show()
     plt.clf()
 

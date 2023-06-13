@@ -28,8 +28,9 @@ class CustomImageDataset(Dataset):
 
 processor = tf.AutoImageProcessor.from_pretrained("microsoft/resnet-50")
 model = tf.ResNetForImageClassification.from_pretrained("microsoft/resnet-50", num_labels = 1, ignore_mismatched_sizes = True).to("cuda")
+origDir = os.getcwd()
 
-os.chdir(os.getcwd()+"/Data")
+os.chdir(origDir+"/Data")
 df = pd.read_csv("submissions.csv")
 upvotes = df["Score"].to_numpy()
 logupvotes = np.log(upvotes+1)
@@ -72,16 +73,16 @@ def compute_metrics_for_regression(eval_pred):
     return {"mse": mse, "rmse": rmse, "mae": mae, "r2": r2, "smape": smape}
 
 
-
+os.chdir(origDir + "/ResNet")
 
 training_args = tf.TrainingArguments(
-    output_dir ='./results',          
-    num_train_epochs = 100,     
+    output_dir ='./resultsCNN',          
+    num_train_epochs = 10,     
     per_device_train_batch_size = 24,   
     per_device_eval_batch_size = 20,   
     weight_decay = 0.01,               
     learning_rate = 2e-5,
-    logging_dir = './logs',            
+    logging_dir = './logsCNN',            
     save_total_limit = 10,
     load_best_model_at_end = True,     
     metric_for_best_model = 'rmse',    

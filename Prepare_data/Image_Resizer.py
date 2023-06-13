@@ -19,8 +19,8 @@ def resize(image, size):
 #resize(im).save("ExamplePics/0up1cmenb8ma1_resized.jpg")
 def resize_all(size):
     startTime=time.time()
-    directory = "images"
-    resize_directory = "../Data/resized_images256"
+    directory = "Data/FullImages92000/resized_images"
+    resize_directory = "Data/resized_images256"
     CHECK_FOLDER = os.path.isdir(resize_directory)
     if not CHECK_FOLDER:
         os.makedirs(resize_directory)

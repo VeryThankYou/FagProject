@@ -1,5 +1,8 @@
 /Data
-/ResNet/results
+/ResNet/resultsCNN
+/ResNet/resultsHPC
+/ResNet/resultsHPC86
+/ResNet/logsCNN
 /StyleGAN3/Splitter/images
 /StyleGAN3/Splitter/results
 /StyleGAN3/stylegan3-main/datasets/most_likeable_data256.zip
