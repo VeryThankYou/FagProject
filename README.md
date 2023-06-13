@@ -13,7 +13,7 @@ The images were resized with Image_Resizer.py. The desired dimensions turned out
 ![Image Link](https://github.com/VeryThankYou/FagProject/blob/Organized/readme_images/Data.png)
 
 ## ResNet
-HFFeatureExtractor is the file for our feature extracting CNN.
+HFFeatureExtractor is the file for extracting features from the CNN. The CNN is a pretrained ResNet-50 made for image classification found on huggingface. We modified the network to a CNN regression by editing the last layer of the network and fine-tuned the network by training it on our dataset. The RegressionEvaluation.py calculates the performance of the CNN compared to a baseline and FeatureVisualizer.py can visualize layers of the network. 
 
 ![Image Link](https://github.com/VeryThankYou/FagProject/blob/Organized/readme_images/FeatureExtraction.png)
 
@@ -23,7 +23,10 @@ The GAN folder contains a failed attempt (Keras.py) to build a GAN from scratch.
 ![Image Link](https://github.com/VeryThankYou/FagProject/blob/Organized/readme_images/10epochs.png)
 
 ## StyleGAN3
-
-
+The StyleGAN3 folder contains the files necessary to train the pretrained StyleGAN3. In the stylegan3-main holds the snapshot of the pretrained StyleGAN3 (.pkl file) and a folder called datasets which contains the zipped dataset. 
+The splitter splits the resulting snapshots into individual images and combined the images with the same seed across the models trained on different datasets.
 
 ![Image Link](https://github.com/VeryThankYou/FagProject/blob/Organized/readme_images/combined164.png)
+
+## Questionnaire
+The preparations for the questionnaire included a randomization of the order of the individual images in the combined images across the models trained on different datasets. This was done in order to avoid additional bias. The results from the questionnaire could be found as a .csv-file and a script using statistical analysis called Questionnaire_Stats.py was used to assess the significance of the results. 
