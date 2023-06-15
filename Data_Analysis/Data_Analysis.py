@@ -9,6 +9,7 @@ from PIL import Image
 os.chdir(os.getcwd()+"/Data")
 df = pd.read_csv("submissions.csv")
 upvotes = df["Score"].to_numpy()
+logupvotes = np.log(upvotes+1)
 
 # Data Description
 data_description = {}
@@ -22,7 +23,22 @@ data_description["Q_1"] = np.quantile(upvotes, q=0.25)
 data_description["Median"] = np.median(upvotes)
 data_description["Q_3"] = np.quantile(upvotes, q=0.75)
 
-print(data_description)
+data_description_log = {}
+data_description_log["Min"] = np.min(logupvotes)
+data_description_log["Max"] = np.max(logupvotes)
+data_description_log["Mean"] = round(np.mean(logupvotes),1)
+data_description_log["Std"] = round(np.std(logupvotes),1)
+data_description_log["Q_1"] = np.quantile(logupvotes, q=0.25)
+data_description_log["Median"] = np.median(logupvotes)
+data_description_log["Q_3"] = np.quantile(logupvotes, q=0.75)
+
+data_description = pd.DataFrame(data_description, index=[0])
+print(data_description.style.to_latex(position = "H", position_float="centering", hrules = True))
+
+data_description_log = pd.DataFrame(data_description_log, index=[0])
+data_description_log = data_description_log.style.format(decimal='.', thousands=',', precision=2)
+print(data_description_log.to_latex(position = "H", position_float="centering", hrules = True))
+
 
 # Histograms
 
@@ -33,15 +49,10 @@ plt.savefig("Histogram_upvotes.png")
 plt.show()
 
 
-logupvotes = np.log(upvotes+1)
 print(len(logupvotes))
 plt.hist(logupvotes)
 plt.savefig("Histogram_log_upvotes.png")
 plt.show()
-
-
-data_description = pd.DataFrame(data_description, index=[0])
-print(data_description.style.to_latex(position = "H", position_float="centering", hrules = True))
 
 
 # Average image
