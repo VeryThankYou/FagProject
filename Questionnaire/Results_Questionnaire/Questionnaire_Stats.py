@@ -83,12 +83,17 @@ print(hyp5/nobs)
 print(bestIsBest/nobs)
 hypcounts = [hyp1, hyp2, hyp3, hyp4, hyp5]
 table = {"Proportions": [hyp/nobs for hyp in hypcounts]}
+table["Proportions"].append(bestIsBest/nobs)
 statpval = [proportions_ztest(hyp, nobs, value, alternative = "larger", prop_var=value) for hyp in hypcounts]
 table["Test statistic"] = [e[0] for e in statpval]
 table["P-value"] = [e[1] for e in statpval]
+
+stat, pval = proportions_ztest(bestIsBest, nobs, 0.25, alternative = "larger", prop_var=0.25)
+table["P-value"].append(pval)
 pvals = [(e[0] + 1, e[1]) for e in enumerate(table["P-value"])]
+table["Test statistic"].append(stat)
 pvalssorted = sorted(pvals, key=lambda x: x[1])
-adjustVals = [(e[0], e[1] * len(hypcounts) / (i+1)) for i, e in enumerate(pvalssorted)]
+adjustVals = [(e[0], e[1] * (len(hypcounts) + 1) / (i+1)) for i, e in enumerate(pvalssorted)]
 table["Adjusted P-value"] = [e[1] for e in sorted(adjustVals, key=lambda x: x[0])]
 print(adjustVals)
 table = pd.DataFrame(data=table)
@@ -98,8 +103,7 @@ print(table)
 
 
 
-stat, pval = proportions_ztest(bestIsBest, nobs, 0.25, alternative = "larger", prop_var=0.25)
-print(pval)
+
 
 stat, pval = proportions_ztest(worstPreIsWorst, nobs, 0.5, alternative = "larger", prop_var=0.5)
 print(pval)
