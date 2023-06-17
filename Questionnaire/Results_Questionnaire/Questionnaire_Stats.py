@@ -2,21 +2,27 @@ import pandas as pd
 import numpy as np
 from statsmodels.stats.proportion import proportions_ztest
 import os 
+
+# Set directory
 os.chdir(os.getcwd()+"/Questionnaire/Results_Questionnaire")
+
+# Create list of dictionaries to convert the scrambled order of images to the real order
 txtfile = open("order.txt","r")
 lines = txtfile.readlines()
-
 lines = [e[:-1] for e in lines[1:]]
+# To read, index by question number - 1, then index image number - 1. Then you get the model number.
+# 0 = pretrained model, 1 = low-upvote model, 2 = all data model, 3 = high-upvote model
 translator = [{int(i): int(e) for i, e in enumerate(line.split(":"))} for line in lines]
 
-
+# Read the responses, sort so only the respondants who consented are shown
 df = pd.read_csv("FormResponses.csv")
 df = df[df.iloc[:, 1] == "I consent"]
 
-
+# Create np array of answers
+# Every row is a single respondent's answers to a single question
+# First column is their favourite image of the question, second is their second-favorite and so on
 stackedResponses = np.zeros((df.shape[0] * 16, 4))
 for i in range(16):
-    #indices = ["Q" + str(i + 1) + "Best" + str(i2 + 1) for i2 in range(4)]
     dfQ = df.iloc[:, (2 + i * 4):(2 + (i + 1) * 4)]
     for i2 in range(4):
         column = dfQ.iloc[:, i2]
@@ -25,32 +31,33 @@ for i in range(16):
 print(stackedResponses)
 print(stackedResponses.shape)
 
-# Hypothesis 1:
+# Hypothesis A:
 # All data is better than pretrained
 hyp1 = 0
 
-# Hypothesis 2:
+# Hypothesis B:
 # Bad data is worse than pretrained
 hyp2 = 0
 
-# Hypothesis 3:
+# Hypothesis C:
 # Good data is better than pretrained
 hyp3 = 0
 
-# Hypothesis 4:
+# Hypothesis D:
 # Good data is better than all data
 hyp4 = 0
 
-# Hypothesis 5:
+# Hypothesis E:
 # Good data is better than bad data
 hyp5 = 0
 
-# Kinda hypothesis
+# Hypothesis F
 bestIsBest = 0
 
-# Kinda hypothesis 2
+# Kinda hypothesis
 worstPreIsWorst = 0
 
+# Count every occurance that supports a hypothesis
 for i in range(stackedResponses.shape[0]):
     question = int(i / df.shape[0])
     #print(stackedResponses[i, :], question)
@@ -71,16 +78,19 @@ for i in range(stackedResponses.shape[0]):
     if votes[0] == 3 or votes[1] == 3:
         worstPreIsWorst = worstPreIsWorst + 1
 
+# Define number of data points
 nobs = stackedResponses.shape[0]
-value = 0.5
 
-print(stackedResponses.shape)
+# Print proportions
 print(hyp1/nobs)
 print(hyp2/nobs)
 print(hyp3/nobs)
 print(hyp4/nobs)
 print(hyp5/nobs)
 print(bestIsBest/nobs)
+
+# Compute z-tests, hypothesis F is done singularly, as the null-hypothesis-proportion is different
+value = 0.5
 hypcounts = [hyp1, hyp2, hyp3, hyp4, hyp5]
 table = {"Proportions": [hyp/nobs for hyp in hypcounts]}
 table["Proportions"].append(bestIsBest/nobs)
@@ -96,6 +106,8 @@ pvalssorted = sorted(pvals, key=lambda x: x[1])
 adjustVals = [(e[0], e[1] * (len(hypcounts) + 1) / (i+1)) for i, e in enumerate(pvalssorted)]
 table["Adjusted P-value"] = [e[1] for e in sorted(adjustVals, key=lambda x: x[0])]
 print(adjustVals)
+
+# Build and print table of results
 table = pd.DataFrame(data=table)
 print(table)
 
