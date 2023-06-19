@@ -1,0 +1,109 @@
+e1eb09f - VeryThankYou, 2 days ago : FeatureVisualizer commented
+b690a21 - VeryThankYou, 2 days ago : RegressionEvaluation commented
+ef2fe7a - VeryThankYou, 2 days ago : Commented HFFeatureExtraction
+1458386 - VeryThankYou, 2 days ago : Commented questionnaire stats
+93bb750 - VeryThankYou, 2 days ago : Final stats
+bd9d60f - VeryThankYou, 5 days ago : Added Benjamini-hochberg correction
+822e16e - Erik Buur Christensen, 6 days ago : Update README.md
+62d8e6c - clarachristiansen, 6 days ago : Update README.md CUDA
+3978598 - VeryThankYou, 6 days ago : Fixed directory stuff for ResNet
+de9e0b9 - VeryThankYou, 6 days ago : Did questionnaire stuff
+8acae75 - clarachristiansen, 6 days ago : Update README.md with description of the missing files and folders
+f022293 - clarachristiansen, 6 days ago : Update README.md
+722e0ef - clarachristiansen, 6 days ago : Readme everything described
+3d54341 - clarachristiansen, 7 days ago : check
+6f0727f - clarachristiansen, 7 days ago : Two photos
+efa7042 - clarachristiansen, 7 days ago : Readme
+3714113 - clarachristiansen, 7 days ago : Image to readme
+7406e19 - clarachristiansen, 7 days ago : without DS_Store
+7844c4b - clarachristiansen, 7 days ago : Update README.md
+eb365a6 - clarachristiansen, 7 days ago : Organized everything
+130d904 - Frederik Winther Bæk, 7 days ago : Update .gitignore
+eed5f3a - Frederik Winther Bæk, 7 days ago : Update .gitignore
+516dea3 - clarachristiansen, 7 days ago : Publish branch
+2663f87 - VeryThankYou, 7 days ago : Merge branch 'main' of https://github.com/VeryThankYou/FagProject
+d220390 - VeryThankYou, 7 days ago : HPCstuff uploaded
+1da48d4 - Frederik Winther Bæk, 7 days ago : Randomized order of combined images
+74101f4 - Frederik Winther Bæk, 7 days ago : Merge branch 'main' of https://github.com/VeryThankYou/FagProject
+8292fbe - Frederik Winther Bæk, 7 days ago : Splitter code
+538a969 - VeryThankYou, 8 days ago : Stats file done
+5ff77ab - VeryThankYou, 8 days ago : specific features
+cdba384 - VeryThankYou, 10 days ago : First resnet block feature extraction
+1dc40ee - VeryThankYou, 11 days ago : Extracted Features and CNN
+f88e498 - VeryThankYou, 11 days ago : Extracted features and CNN stuff
+638650c - VeryThankYou, 11 days ago : FeatureExtraction Done
+b0d5c4e - clarachristiansen, 12 days ago : ESRGAN, least_likeable_images made from most_likeable_image.py, FeatureExatractor another way
+530e3b8 - clarachristiansen, 12 days ago : ESRGAN + most_likeable_image
+8edec5c - clarachristiansen, 13 days ago : Merge branch 'main' of https://github.com/VeryThankYou/FagProject
+0c8962a - clarachristiansen, 13 days ago : StyleGAN3 for computers
+b821447 - VeryThankYou, 13 days ago : zip added to gitignore
+fd48d82 - VeryThankYou, 13 days ago : Make 256px images
+c7982a9 - VeryThankYou, 13 days ago : Resized images for StyleGAN
+dac3920 - VeryThankYou, 13 days ago : Updated readme
+0fb8389 - VeryThankYou, 2 weeks ago : Merge branch 'main' of https://github.com/VeryThankYou/FagProject
+0bb7b53 - VeryThankYou, 2 weeks ago : Update image save
+1c0cd52 - clarachristiansen, 2 weeks ago : GAN with Keras that works with ThinLinc
+3ebcfcd - clarachristiansen, 2 weeks ago : Final GAN with Keras
+66bff8d - VeryThankYou, 2 weeks ago : visualizing kernel complete
+1b08fc1 - clarachristiansen, 3 weeks ago : Merge branch 'main' of https://github.com/VeryThankYou/FagProject
+60cd1d7 - clarachristiansen, 3 weeks ago : GAN Keras
+52f507d - Frederik Winther Bæk, 3 weeks ago : Merge branch 'main' of https://github.com/VeryThankYou/FagProject
+427a6e4 - Frederik Winther Bæk, 3 weeks ago : Update GAN_keras.ipynb
+b5b2ef8 - VeryThankYou, 3 weeks ago : training stuff works
+c917b95 - clarachristiansen, 3 weeks ago : Merge branch 'main' of https://github.com/VeryThankYou/FagProject
+4c3a3d7 - clarachristiansen, 3 weeks ago : GAN via keras
+bce4c0d - VeryThankYou, 3 weeks ago : Update HFFeatureExtractor.py
+19a0bf8 - clarachristiansen, 3 weeks ago : Merge branch 'main' of https://github.com/VeryThankYou/FagProject
+6da01bf - clarachristiansen, 3 weeks ago : Keras GAN
+d2f60e6 - VeryThankYou, 4 weeks ago : featureextraction
+a31958e - VeryThankYou, 4 weeks ago : datframestuff
+20e0cff - VeryThankYou, 4 weeks ago : HuggingFaceFeatureExtraction
+95680d6 - clarachristiansen, 9 weeks ago : We cloned a different repository which changed our README
+53d5402 - VeryThankYou, 3 months ago : Simple CNN created
+9ce2c65 - VeryThankYou, 3 months ago : Start feature extraction
+56a7d27 - VeryThankYou, 3 months ago : Get logtransformed scores as histogram
+99d01cd - clarachristiansen, 3 months ago : With quantiles and easier grayscaled vs colours
+470f54b - clarachristiansen, 3 months ago : Merge branch 'main' of https://github.com/VeryThankYou/FagProject
+078048a - clarachristiansen, 3 months ago : Data description - Upvotes (misses average image)
+242a9e9 - VeryThankYou, 3 months ago : Added csv to gitignore
+3669319 - VeryThankYou, 3 months ago : update date for scraping pictures
+45e9e7c - Frederik Winther Bæk, 3 months ago : Update DownloadRedditPictures.py
+060c5a2 - Frederik Winther Bæk, 3 months ago : Added header to csv
+eac74ea - Frederik Winther Bæk, 3 months ago : Merge branch 'main' of https://github.com/VeryThankYou/FagProject
+c2b7fe1 - Frederik Winther Bæk, 3 months ago : Added csv writer
+afbd42d - VeryThankYou, 3 months ago : Merge branch 'main' of https://github.com/VeryThankYou/FagProject
+036b23a - VeryThankYou, 3 months ago : Resizer deleting old images
+6a1345e - clarachristiansen, 3 months ago : Merge branch 'main' of https://github.com/VeryThankYou/FagProject
+771b875 - Frederik Winther Bæk, 3 months ago : Added another timer
+59632b4 - Frederik Winther Bæk, 3 months ago : Added counter and timer
+c3adef3 - VeryThankYou, 3 months ago : Request more than one ID at a time
+72a2784 - clarachristiansen, 3 months ago : Merge branch 'main' of https://github.com/VeryThankYou/FagProject
+7227728 - Frederik Winther Bæk, 3 months ago : Implementing Multiprocessing
+9c5e0b0 - clarachristiansen, 3 months ago : Merge branch 'main' of https://github.com/VeryThankYou/FagProject
+3ff56b6 - Frederik Winther Bæk, 3 months ago : Updated to bypass limit
+9c29ad6 - clarachristiansen, 3 months ago : Delete venv
+fb1dc7a - clarachristiansen, 3 months ago : Merge branch 'main' of https://github.com/VeryThankYou/FagProject
+f2aa444 - clarachristiansen, 3 months ago : Download ids via Pushshift
+0a32f54 - Frederik Winther Bæk, 3 months ago : Merge branch 'main' of https://github.com/VeryThankYou/FagProject
+7343e6a - Frederik Winther Bæk, 3 months ago : Changed some parameters
+7501da8 - VeryThankYou, 3 months ago : Added folder in resize method
+9a732e5 - Frederik Winther Bæk, 3 months ago : Added timer for resizer
+e48ecf2 - Frederik Winther Bæk, 3 months ago : Implemented main
+aeb4485 - VeryThankYou, 3 months ago : Updated resizer for dynamic size
+92a8aa0 - Frederik Winther Bæk, 3 months ago : Merge branch 'main' of https://github.com/VeryThankYou/FagProject
+fc9bbb3 - Frederik Winther Bæk, 3 months ago : Implemented OOP
+ad1e74c - VeryThankYou, 3 months ago : Update gitignore
+a9295b8 - VeryThankYou, 3 months ago : Resize images in loop
+ff93e53 - Frederik Winther Bæk, 3 months ago : Update SubDownload.py
+f7f75d4 - Frederik Winther Bæk, 3 months ago : Update SubDownload.py
+698d0cc - Frederik Winther Bæk, 3 months ago : Added thumbnails.
+15fb56b - Frederik Winther Bæk, 3 months ago : Merge branch 'main' of https://github.com/VeryThankYou/FagProject
+4cb2b8c - Frederik Winther Bæk, 3 months ago : Added status
+106428a - clarachristiansen, 3 months ago : venv for Reddit web scraper
+78cda7d - Frederik Winther Bæk, 3 months ago : Credentials for the webscraper
+c8703f5 - Frederik Winther Bæk, 3 months ago : Reddit webscraper
+7756c23 - clarachristiansen, 3 months ago : Merge branch 'main' of https://github.com/VeryThankYou/FagProject
+a4f7e6f - clarachristiansen, 3 months ago : Reddit scrape images
+c21f9ff - VeryThankYou, 3 months ago : Image resizer
+9655d07 - clarachristiansen, 3 months ago : Import data
+b2aed42 - Erik Buur Christensen, 3 months ago : Initial commit
